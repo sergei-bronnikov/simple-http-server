@@ -2,6 +2,7 @@ package httpserver
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/urfave/cli/v2"
 	"net/http"
 )
@@ -11,11 +12,14 @@ func Run(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
+	gin.SetMode(gin.ReleaseMode)
+	router := gin.Default()
 
-	http.Handle("/", http.FileServer(http.Dir(opts.targetPath)))
-	err = http.ListenAndServe(fmt.Sprintf(":%d", opts.port), nil)
-	if err != nil {
-		return err
+	router.Static("/", opts.targetPath)
+
+	srv := http.Server{
+		Addr:    fmt.Sprintf(":%d", opts.port),
+		Handler: router,
 	}
-	return nil
+	return srv.ListenAndServe()
 }

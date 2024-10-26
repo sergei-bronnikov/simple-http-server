@@ -10,12 +10,11 @@ const version = "dev"
 
 func Run() error {
 	app := &cli.App{
-		Name:        "Simple HTTP Server",
 		Usage:       "",
-		Description: "",
+		Description: "Simple http server",
 		Version:     version,
 		Args:        true,
-		ArgsUsage:   "",
+		ArgsUsage:   "<target_directory>",
 		Flags:       httpserver.CliFlags,
 		Action: func(c *cli.Context) error {
 			return httpserver.Run(c)
